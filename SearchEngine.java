@@ -30,7 +30,7 @@ public class SearchEngine
                 {
                     randomWord = parameters[1];
                     listOfWords.add(randomWord);
-                    return ""
+                    return "";
                 }
             }
             return "404 Not Found!";
