@@ -2,24 +2,24 @@ import java.io.IOException;
 import java.net.URI;
 import java.util.ArrayList;
 
-public class SearchEngine 
+class Handler implements URLHandler
 {
-    String randomWord = " ";
-    public String handleRequest(URI url) {
-        ArrayList<String> listOfWords = new ArrayList<String>();
+    String list = "";
+    ArrayList<String> listOfWords = new ArrayList<String>();
+    public String handleRequest(URI url) 
+    {
         if (url.getPath().equals("/")) 
         {
-            String list = "";
-            if (listOfWords.size() == 0)
-            {
-                return " ";
-            }
+            return "main page";
+        }
+        else if (url.getPath().equals("/p"))
+        {
             for (int i = 0; i < listOfWords.size(); i++)
             {
-                list = listOfWords.get(i) + " ";
+                list = list + " " + listOfWords.get(i);
             }
-            return list;
-        } 
+            return String.format(list);
+        }
         else 
         {
             System.out.println("Path: " + url.getPath());
@@ -28,12 +28,25 @@ public class SearchEngine
                 String[] parameters = url.getQuery().split("=");
                 if (parameters[0].equals("s")) 
                 {
-                    randomWord = parameters[1];
-                    listOfWords.add(randomWord);
-                    return "";
+                    listOfWords.add(parameters[1]);
+                    return "added";
                 }
             }
             return "404 Not Found!";
         }
+    }
+}
+
+class SearchEngine {
+    public static void main(String[] args) throws IOException 
+    {
+        if(args.length == 0){
+            System.out.println("Missing port number! Try any number between 1024 to 49151");
+            return;
+        }
+
+        int port = Integer.parseInt(args[0]);
+
+        Server.start(port, new Handler());
     }
 }
